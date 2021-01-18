@@ -43,7 +43,6 @@ export class AwsFargateByCdkStack extends cdk.Stack {
       serviceName: 'demoSvc',
       cluster: ecsCluster,
       taskDefinition: taskDef,
-      
     })
     ecsSvc.connections.allowFrom(
       ec2.Peer.ipv4("0.0.0.0/0"),
@@ -60,6 +59,7 @@ export class AwsFargateByCdkStack extends cdk.Stack {
     // set ecs service strategy
     const strategy = [{ capacityProvider: "FARGATE_SPOT", weight: 1 }];
     const theFirst: ecs.CfnService = ecsSvc.node.children[0] as ecs.CfnService;
+    theFirst.addPropertyDeletionOverride('LaunchType');
     theFirst.addPropertyOverride("capacityProviderStrategy", strategy);
 
     //
